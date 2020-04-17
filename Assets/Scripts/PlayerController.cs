@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private CharacterController controller;
 
+    public bool IsMoving { get; set; }
+
     [SerializeField] private float walkSpeed = 12.0f;
     [SerializeField] private float runSpeed = 24.0f;
     [SerializeField] private float gravity = 5.0f;
@@ -30,16 +32,19 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isRunning", true);
             animator.SetBool("isWalking", false);
             speed = runSpeed;
+            IsMoving = true;
         }
         else if (x != 0f || z != 0f)
         {
             animator.SetBool("isWalking", true);
             animator.SetBool("isRunning", false);
+            IsMoving = true;
         }
         else
         {
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
+            IsMoving  = false;
         }
 
         Vector3 move = transform.right * x + -transform.up * gravity + transform.forward * z;

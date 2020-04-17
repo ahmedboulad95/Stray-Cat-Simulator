@@ -5,10 +5,14 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 100.0f;
 
     private Transform playerTransform;
+    private GameObject player;
+    private PlayerController playerCon;
 
     void Start()
     {
-        playerTransform = GameObject.FindWithTag("Player").transform;
+        player = GameObject.FindWithTag("Player");
+        playerTransform = player.transform;
+        playerCon = player.GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -17,7 +21,16 @@ public class CameraController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        playerTransform.Rotate(Vector3.up * mouseX);
+        //Vector3 rotationVector = (playerCon.IsMoving) ? Vector3.up : playerTransform.position;
+
+        if(playerCon.IsMoving)
+        {
+            playerTransform.Rotate(Vector3.up * mouseX);
+        }
+        else
+        {
+            transform.RotateAround(playerTransform.position, Vector3.up, mouseX);
+        }
     }
 
 }
