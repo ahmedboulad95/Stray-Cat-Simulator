@@ -1,36 +1,52 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float mouseSensitivity = 100.0f;
-
-    private Transform playerTransform;
-    private GameObject player;
     private PlayerController playerCon;
+    private CameraState cameraState;
+    private Dictionary<string, CameraState> cameraStateMap;
+    private Camera mainCamera;
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        playerTransform = player.transform;
-        playerCon = player.GetComponent<PlayerController>();
+        playerCon = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
+        mainCamera = Camera.main;
+        BuildStateMap();
+        cameraState = cameraStateMap["STATIONARY"];
     }
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        //Vector3 rotationVector = (playerCon.IsMoving) ? Vector3.up : playerTransform.position;
-
-        if(playerCon.IsMoving)
+        if (playerCon.IsMoving && Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
-            playerTransform.Rotate(Vector3.up * mouseX);
+            //Debug.Log("Still returning to start");
+            Debug.Log(mainCamera.transform.rotation.y);
+            cameraState.ReturnToStart();
         }
         else
         {
-            transform.RotateAround(playerTransform.position, Vector3.up, mouseX);
+            if (playerCon.IsMoving)
+            {
+                cameraState = cameraStateMap["MOVING"];
+            }
+            else
+            {
+                cameraState = cameraStateMap["STATIONARY"];
+            }
+
+            cameraState.Rotate();
         }
+    }
+
+    private void BuildStateMap()
+    {
+        cameraStateMap = new Dictionary<string, CameraState>();
+        cameraStateMap.Add("MOVING", new MovingState());
+        cameraStateMap.Add("STATIONARY", new StationaryState());
     }
 
 }

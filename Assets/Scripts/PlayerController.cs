@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,35 +17,46 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        IsMoving = false;
     }
 
     void Update()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        float speed = walkSpeed;
 
-        if (Input.GetKey("left shift"))
+        if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
         {
-            animator.SetBool("isRunning", true);
-            animator.SetBool("isWalking", false);
-            speed = runSpeed;
             IsMoving = true;
-        }
-        else if (x != 0f || z != 0f)
-        {
-            animator.SetBool("isWalking", true);
-            animator.SetBool("isRunning", false);
-            IsMoving = true;
+            bool isRunning = Input.GetKey("left shift");
+            float moveSpeed = (isRunning) ? runSpeed : walkSpeed;
+
+            if(isRunning)
+            {
+                animator.SetBool("isRunning", true);
+                animator.SetBool("isWalking", false);
+            }
+            else
+            {
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isWalking", true);
+            }
+
+            //Vector3 direction = new Vector3(x, 0, z);
+            //direction = (direction.sqrMagnitude > 1.0f) ? direction.normalized : direction;
+
+            Vector3 velocity = transform.right * x + -transform.up * gravity + transform.forward * z;
+            controller.Move(velocity * moveSpeed * Time.deltaTime);
+
+            /*Vector3 facingRotation = Vector3.Normalize(new Vector3(x, 0.0f, z));
+            if (facingRotation != Vector3.zero)
+                transform.forward = facingRotation;*/
         }
         else
         {
-            animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
-            IsMoving  = false;
+            animator.SetBool("isWalking", false);
+            IsMoving = false;
         }
-
-        Vector3 move = transform.right * x + -transform.up * gravity + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
     }
 }
