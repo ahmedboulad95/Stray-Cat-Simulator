@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private Rigidbody rb;
     private CharacterController controller;
+    private Camera camera;
 
     public bool IsMoving { get; set; }
 
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        camera = Camera.main;
         IsMoving = false;
     }
 
@@ -42,15 +44,15 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("isWalking", true);
             }
 
-            //Vector3 direction = new Vector3(x, 0, z);
-            //direction = (direction.sqrMagnitude > 1.0f) ? direction.normalized : direction;
+            //Vector3 movementDirection = new Vector3(x, 0, z);
+            //movementDirection = camera.transform.TransformDirection(movementDirection);
+            //Debug.Log(movementDirection);
 
-            Vector3 velocity = transform.right * x + -transform.up * gravity + transform.forward * z;
+            //movementDirection.y -= -transform.up.y * gravity;
+
+            Vector3 velocity = camera.transform.right * x + -transform.up * gravity + camera.transform.forward * z;
+            //velocity = camera.transform.TransformDirection(velocity);
             controller.Move(velocity * moveSpeed * Time.deltaTime);
-
-            /*Vector3 facingRotation = Vector3.Normalize(new Vector3(x, 0.0f, z));
-            if (facingRotation != Vector3.zero)
-                transform.forward = facingRotation;*/
         }
         else
         {

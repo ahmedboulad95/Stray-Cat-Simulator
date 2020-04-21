@@ -21,14 +21,14 @@ public class CameraController : MonoBehaviour
     {
         Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        if (playerCon.IsMoving && Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
+        /*if (playerCon.IsMoving && Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
             //Debug.Log("Still returning to start");
             Debug.Log(mainCamera.transform.rotation.y);
             cameraState.ReturnToStart();
         }
         else
-        {
+        {*/
             if (playerCon.IsMoving)
             {
                 cameraState = cameraStateMap["MOVING"];
@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
             }
 
             cameraState.Rotate();
-        }
+        //}
     }
 
     private void BuildStateMap()
