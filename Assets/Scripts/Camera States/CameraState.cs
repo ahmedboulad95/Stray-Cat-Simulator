@@ -7,13 +7,14 @@ public class CameraState
     protected GameObject player_;
     protected float mouseSensitivity_ = 100.0f;
     protected Vector2 mousePosition_;
-
-    protected float rotationSpeed_ = 10.0f;
+    protected Vector3 offset_;
+    protected float rotationSpeed_ = 1.0f;
 
     public CameraState()
     {
         mainCamera_ = Camera.main;
         player_ = GameObject.FindWithTag("Player");
+        offset_ = player_.transform.position - mainCamera_.transform.position;
     }
 
     public virtual void Rotate()

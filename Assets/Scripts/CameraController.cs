@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private GameObject player;
     private PlayerController playerCon;
     private CameraState cameraState;
     private Dictionary<string, CameraState> cameraStateMap;
@@ -10,7 +11,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        playerCon = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        player = GameObject.FindWithTag("Player");
+        playerCon = player.GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
         mainCamera = Camera.main;
         BuildStateMap();
@@ -21,25 +23,19 @@ public class CameraController : MonoBehaviour
     {
         Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        /*if (playerCon.IsMoving && Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
+        if (playerCon.IsMoving)
         {
-            //Debug.Log("Still returning to start");
-            Debug.Log(mainCamera.transform.rotation.y);
-            cameraState.ReturnToStart();
+            cameraState = cameraStateMap["MOVING"];
         }
         else
-        {*/
-            if (playerCon.IsMoving)
-            {
-                cameraState = cameraStateMap["MOVING"];
-            }
-            else
-            {
-                cameraState = cameraStateMap["STATIONARY"];
-            }
+        {
+            cameraState = cameraStateMap["STATIONARY"];
+        }
+    }
 
-            cameraState.Rotate();
-        //}
+    void LateUpdate()
+    {
+        cameraState.Rotate();
     }
 
     private void BuildStateMap()

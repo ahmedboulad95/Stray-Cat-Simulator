@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -160,12 +160,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: -0.12, z: 0}
---- !u!4 &543849851 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 38760cd9d0cdb434e9787693ce694f80,
-    type: 3}
-  m_PrefabInstance: {fileID: 1618400174}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &543849852
 Animator:
   serializedVersion: 3
@@ -361,8 +355,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.13, z: -4.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 543849851}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 21.986002, y: 0, z: 1.8570001}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -577,7 +571,7 @@ Transform:
   m_LocalScale: {x: 100, y: 1, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1618400174
 PrefabInstance:
@@ -629,7 +623,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 38760cd9d0cdb434e9787693ce694f80,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 38760cd9d0cdb434e9787693ce694f80,
         type: 3}
