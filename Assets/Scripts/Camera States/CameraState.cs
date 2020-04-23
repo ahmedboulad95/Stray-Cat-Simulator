@@ -7,8 +7,9 @@ public class CameraState
     protected GameObject player_;
     protected float mouseSensitivity_ = 100.0f;
     protected Vector2 mousePosition_;
-    protected Vector3 offset_;
+    protected static Vector3 offset_;
     protected float rotationSpeed_ = 1.0f;
+    protected static Vector3 dynamicOffset_;
 
     public CameraState()
     {
@@ -20,6 +21,7 @@ public class CameraState
     public virtual void Rotate()
     {
         Debug.Log("Base rotate called");
+        //dynamicOffset_ = player_.transform.position - mainCamera_.transform.position;
     }
 
     public Vector2 GetMousePosition()
