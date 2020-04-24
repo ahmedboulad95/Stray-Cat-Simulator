@@ -9,6 +9,7 @@ public class CameraState
     protected Vector2 mousePosition_;
     protected static Vector3 offset_;
     protected float rotationSpeed_ = 1.0f;
+    protected float directionalRotateSpeed_ = 1.5f;
     protected PlayerController playerController_;
 
     public CameraState()
@@ -21,7 +22,15 @@ public class CameraState
 
     public virtual void Rotate()
     {
-        Debug.Log("Base rotate called");
+        float vertical = Input.GetAxisRaw("Vertical") * mainCamera_.transform.forward.z;
+        float horizontal = Input.GetAxisRaw("Horizontal") * mainCamera_.transform.right.x;
+
+        if (!Mathf.Approximately(horizontal, 0.0f) || !Mathf.Approximately(vertical, 0.0f))
+        {
+            Vector3 desiredMoveDirection = Input.GetAxisRaw("Vertical") * mainCamera_.transform.forward + Input.GetAxisRaw("Horizontal") * mainCamera_.transform.right;
+            desiredMoveDirection.y = 0.0f;
+            player_.transform.rotation = Quaternion.RotateTowards(player_.transform.rotation, Quaternion.LookRotation(desiredMoveDirection), Time.time * directionalRotateSpeed_);
+        }
     }
 
     public Vector2 GetMousePosition()

@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerCon = player.GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         mainCamera = Camera.main;
         BuildStateMap();
         cameraState = cameraStateMap["STATIONARY"];
@@ -23,11 +24,7 @@ public class CameraController : MonoBehaviour
     {
         Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        if(Input.GetKeyDown("w") || Input.GetKeyDown("a") || Input.GetKeyDown("s") || Input.GetKeyDown("d"))
-        {
-            cameraState = cameraStateMap["TRANSITION"];
-        }
-        else if (playerCon.IsMoving)
+        if (playerCon.IsMoving)
         {
             cameraState = cameraStateMap["MOVING"];
         }
@@ -47,8 +44,7 @@ public class CameraController : MonoBehaviour
         cameraStateMap = new Dictionary<string, CameraState>
         {
             { "MOVING", new MovingState() },
-            { "STATIONARY", new StationaryState() },
-            { "TRANSITION", new TransitionState() }
+            { "STATIONARY", new StationaryState() }
         };
     }
 
