@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private CharacterController controller;
     private Camera mainCamera;
+    private Vector3 velocity;
 
     public bool IsMoving { get; set; }
 
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("isWalking", true);
             }
 
-            Vector3 velocity = mainCamera.transform.right * x + -transform.up * gravity + mainCamera.transform.forward * z;
+            velocity = mainCamera.transform.right * x + -transform.up * gravity + mainCamera.transform.forward * z;
             controller.Move(velocity * moveSpeed * Time.deltaTime);
         }
         else
@@ -53,5 +54,10 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isWalking", false);
             IsMoving = false;
         }
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return velocity;
     }
 }

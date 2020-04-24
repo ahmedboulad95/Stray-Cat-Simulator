@@ -8,8 +8,6 @@ public class MovingState : CameraState
     {
         base.Rotate();
 
-        Debug.Log("Offset :: " + offset_);
-
         float horizontal = Input.GetAxis("Mouse X") * rotationSpeed_;
 
         offset_ = Quaternion.AngleAxis(horizontal, Vector3.up) * offset_;

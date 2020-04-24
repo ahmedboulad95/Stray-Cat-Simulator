@@ -23,7 +23,11 @@ public class CameraController : MonoBehaviour
     {
         Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        if (playerCon.IsMoving)
+        if(Input.GetKeyDown("w") || Input.GetKeyDown("a") || Input.GetKeyDown("s") || Input.GetKeyDown("d"))
+        {
+            cameraState = cameraStateMap["TRANSITION"];
+        }
+        else if (playerCon.IsMoving)
         {
             cameraState = cameraStateMap["MOVING"];
         }
@@ -40,9 +44,12 @@ public class CameraController : MonoBehaviour
 
     private void BuildStateMap()
     {
-        cameraStateMap = new Dictionary<string, CameraState>();
-        cameraStateMap.Add("MOVING", new MovingState());
-        cameraStateMap.Add("STATIONARY", new StationaryState());
+        cameraStateMap = new Dictionary<string, CameraState>
+        {
+            { "MOVING", new MovingState() },
+            { "STATIONARY", new StationaryState() },
+            { "TRANSITION", new TransitionState() }
+        };
     }
 
 }

@@ -9,19 +9,19 @@ public class CameraState
     protected Vector2 mousePosition_;
     protected static Vector3 offset_;
     protected float rotationSpeed_ = 1.0f;
-    protected static Vector3 dynamicOffset_;
+    protected PlayerController playerController_;
 
     public CameraState()
     {
         mainCamera_ = Camera.main;
         player_ = GameObject.FindWithTag("Player");
+        playerController_ = player_.GetComponent<PlayerController>();
         offset_ = player_.transform.position - mainCamera_.transform.position;
     }
 
     public virtual void Rotate()
     {
         Debug.Log("Base rotate called");
-        //dynamicOffset_ = player_.transform.position - mainCamera_.transform.position;
     }
 
     public Vector2 GetMousePosition()
