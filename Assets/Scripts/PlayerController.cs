@@ -10,9 +10,12 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMoving { get; set; }
 
-    [SerializeField] private float walkSpeed = 12.0f;
-    [SerializeField] private float runSpeed = 24.0f;
+    [SerializeField] private float walkSpeed = 8.0f;
+    [SerializeField] private float runSpeed = 16.0f;
     [SerializeField] private float gravity = 5.0f;
+
+    [SerializeField] private GameObject bigBallOfViolencePrefab;
+    private bool isFighting = false;
 
     void Start()
     {
@@ -28,11 +31,12 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
+        bool isRunning = Input.GetKey("left shift");
+        float moveSpeed = (isRunning) ? runSpeed : walkSpeed;
+
         if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
         {
             IsMoving = true;
-            bool isRunning = Input.GetKey("left shift");
-            float moveSpeed = (isRunning) ? runSpeed : walkSpeed;
 
             if(isRunning)
             {
@@ -44,9 +48,6 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("isRunning", false);
                 animator.SetBool("isWalking", true);
             }
-
-            velocity = mainCamera.transform.right * x + -transform.up * gravity + mainCamera.transform.forward * z;
-            controller.Move(velocity * moveSpeed * Time.deltaTime);
         }
         else
         {
@@ -54,10 +55,24 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isWalking", false);
             IsMoving = false;
         }
+
+        velocity = mainCamera.transform.right * x + -transform.up * gravity + mainCamera.transform.forward * z;
+        controller.Move(velocity * moveSpeed * Time.deltaTime);
     }
 
     public Vector3 GetVelocity()
     {
         return velocity;
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        /*if(hit.gameObject.tag == "Enemy" && !isFighting)
+        {
+            Instantiate(bigBallOfViolencePrefab, transform.position, Quaternion.identity);
+            isFighting = true;
+            transform.GetComponent<MeshRenderer>().enabled = false;
+            hit.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }*/
     }
 }
