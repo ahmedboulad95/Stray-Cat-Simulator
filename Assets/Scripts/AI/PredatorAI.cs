@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PredatorAI : MonoBehaviour
 {
-    private Animator animator;
+    [SerializeField] private GameObject headIk_;
+    private Animator animator_;
+    private float rotationSpeed_ = 10.0f;
+
+    private string state_ = "Normal";
+    private GameObject inProximityEnemy_;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator_ = GetComponent<Animator>();
     }
 
     void Update()
@@ -16,15 +21,28 @@ public class PredatorAI : MonoBehaviour
         
     }
 
+    void LateUpdate() 
+    {
+        if(state_ == "Scared") 
+        {
+            Vector3 direction = (inProximityEnemy_.transform.position - headIk_.transform.position).normalized;
+            headIk_.transform.rotation = Quaternion.LookRotation(direction);
+        } 
+    }
+
     void OnTriggerEnter(Collider col) {
         if(col.gameObject.tag == "Player") {
-            animator.SetBool("isScared", true);
+            state_ = "Scared";
+            animator_.SetBool("isScared", true);
+            inProximityEnemy_ = col.gameObject;
         }
     }
 
     void OnTriggerExit(Collider col) {
         if(col.gameObject.tag == "Player") {
-            animator.SetBool("isScared", false);
+            state_ = "Normal";
+            animator_.SetBool("isScared", false);
+            inProximityEnemy_ = null;
         }
     }
 }
