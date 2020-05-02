@@ -11,22 +11,18 @@ public class PredatorAI : MonoBehaviour
     private string state_ = "Normal";
     private GameObject inProximityEnemy_;
 
-    void Start()
-    {
+    void Start() {
         animator_ = GetComponent<Animator>();
     }
 
-    void Update()
-    {
+    void Update() {
         
     }
 
-    void LateUpdate() 
-    {
-        if(state_ == "Scared") 
-        {
+    void LateUpdate() {
+        if(state_ == "Scared") {
             Vector3 direction = (inProximityEnemy_.transform.position - headIk_.transform.position).normalized;
-            headIk_.transform.rotation = Quaternion.LookRotation(direction);
+            headIk_.transform.rotation = Quaternion.LookRotation(headIk_.transform.forward, direction);
         } 
     }
 
