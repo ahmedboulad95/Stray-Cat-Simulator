@@ -10,11 +10,7 @@ public class CatAI : PredatorAI
     }
 
     private void LateUpdate() {
-        //if(state_ == "Scared") {
-            state_.HandleLateUpdate(inProximityEnemy_);
-            //animator_.SetBool("isScared", true);
-            //LookAtInProximityEnemy();
-        //}
+        state_.HandleLateUpdate(inProximityEnemy_);
     }
 
     private void OnTriggerEnter(Collider col) {
