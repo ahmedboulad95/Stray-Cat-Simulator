@@ -10,8 +10,8 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMoving { get; set; }
 
-    [SerializeField] private float walkSpeed = 8.0f;
-    [SerializeField] private float runSpeed = 16.0f;
+    [SerializeField] private float walkSpeed = 6.0f;
+    [SerializeField] private float runSpeed = 12.0f;
     [SerializeField] private float gravity = 5.0f;
 
     [SerializeField] private GameObject bigBallOfViolencePrefab;
