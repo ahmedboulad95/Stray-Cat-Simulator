@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Camera mainCamera;
     private Vector3 velocity;
+    private Dictionary<string, Stat> statMap_;
 
     public bool IsMoving { get; set; }
 
@@ -17,17 +19,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject bigBallOfViolencePrefab;
     private bool isFighting = false;
 
-    void Start()
-    {
+    void Start() {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         IsMoving = false;
+
+        BuildStatMap();
     }
 
     void Update()
     {
+        Debug.Log("HP :: " + statMap_["HP"].GetStatValue());
+        Debug.Log("Attack :: " + statMap_["Attack"].GetStatValue());
+
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
@@ -60,13 +66,11 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * moveSpeed * Time.deltaTime);
     }
 
-    public Vector3 GetVelocity()
-    {
+    public Vector3 GetVelocity() {
         return velocity;
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
+    void OnControllerColliderHit(ControllerColliderHit hit) {
         /*if(hit.gameObject.tag == "Enemy" && !isFighting)
         {
             Instantiate(bigBallOfViolencePrefab, transform.position, Quaternion.identity);
@@ -74,5 +78,23 @@ public class PlayerController : MonoBehaviour
             transform.GetComponent<MeshRenderer>().enabled = false;
             hit.gameObject.GetComponent<MeshRenderer>().enabled = false;
         }*/
+    }
+
+    private void BuildStatMap() {
+        statMap_ = new Dictionary<string, Stat>();
+        
+        Stat hpStat = new Stat("HP", 300);
+        hpStat.AddModifier(new StatModifier(hpStat.Name, StatModifier.ModifierType.ADD, 50.0f));
+        hpStat.AddModifier(new StatModifier(hpStat.Name, StatModifier.ModifierType.MULTIPLY, -0.5f));
+        statMap_.Add(hpStat.Name, hpStat);
+
+        Stat attackStat = new Stat("Attack", 5);
+        attackStat.AddModifier(new StatModifier(attackStat.Name, StatModifier.ModifierType.MULTIPLY, 0.5f));
+        statMap_.Add(attackStat.Name, attackStat);
+    }
+
+    public int? GetStatValueByName(string statName) {
+        if(string.IsNullOrEmpty(statName) || !statMap_.ContainsKey(statName)) return null;
+        return statMap_[statName].GetStatValue();
     }
 }

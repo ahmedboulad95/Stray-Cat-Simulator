@@ -10,7 +10,7 @@ public class PredatorAI : MonoBehaviour
     protected GameObject inProximityEnemy_;
     public Dictionary<string, EnemyState> stateMap;
 
-    void Start() {
+    public void Start() {
         animator_ = GetComponent<Animator>();
         stateMap = BuildEnemyStateMap();
         state_ = stateMap["Normal"];
@@ -20,7 +20,8 @@ public class PredatorAI : MonoBehaviour
         return new Dictionary<string, EnemyState> 
         {
             { "Normal", new NormalState(gameObject, headIk_) },
-            { "Scared", new ScaredState(gameObject, headIk_) }
+            { "Scared", new ScaredState(gameObject, headIk_) },
+            { "Aggressive", new AggressiveState(gameObject, headIk_) }
         };
     }
 }
