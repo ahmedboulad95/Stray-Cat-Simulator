@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class EnemyState
+public abstract class EntityState
 {
     protected GameObject self_;
     protected Animator animator_;
     protected GameObject headIk_;
     protected Quaternion baseHeadRotation_;
 
-    public EnemyState(GameObject self, GameObject headIk) {
+    public EntityState(GameObject self, GameObject headIk) {
         self_ = self;
         headIk_ = headIk;
         animator_ = self_.GetComponent<Animator>();

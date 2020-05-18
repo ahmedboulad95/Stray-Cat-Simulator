@@ -43,8 +43,8 @@ public class CameraController : MonoBehaviour
     {
         cameraStateMap = new Dictionary<string, CameraState>
         {
-            { "MOVING", new MovingState() },
-            { "STATIONARY", new StationaryState() }
+            { "MOVING", new S_CameraMoving() },
+            { "STATIONARY", new S_CameraStationary() }
         };
     }
 

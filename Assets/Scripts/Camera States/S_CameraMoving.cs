@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingState : CameraState
+public class S_CameraMoving : CameraState
 {
     public override void Rotate()
     {

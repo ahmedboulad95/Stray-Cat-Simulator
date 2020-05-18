@@ -5,11 +5,9 @@ using UnityEngine;
 public class CatAI : PredatorAI
 {
     [SerializeField] private bool isSitting_;
-    private Dictionary<string, Stat> statMap_;
 
     new void Start() {
         base.Start();
-        BuildStatMap();
     }
 
     void Update() {
@@ -47,15 +45,16 @@ public class CatAI : PredatorAI
         if(col.gameObject.tag == "Player") {
             if(!isSitting_) {
                 inProximityEnemy_ = null;
-                state_ = stateMap["Normal"];
+                state_ = stateMap["Idle"];
                 state_.HandleEnemyExitCloseZone(col);
             }
         }
     }
 
-    private void BuildStatMap() {
-        statMap_ = new Dictionary<string, Stat>();
-        statMap_.Add("HP", new Stat("HP", 200));
-        statMap_.Add("Attack", new Stat("Attack", 10));
+    protected override Dictionary<string, Stat> BuildStatMap() {
+        Dictionary<string, Stat> statMap = new Dictionary<string, Stat>();
+        statMap.Add("HP", new Stat("HP", 200));
+        statMap.Add("Attack", new Stat("Attack", 10));
+        return statMap;
     }
 }

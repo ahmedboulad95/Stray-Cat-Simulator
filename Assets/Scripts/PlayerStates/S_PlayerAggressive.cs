@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AggressiveState : EnemyState
+public class S_PlayerAggressive : EntityState
 {
-    public AggressiveState(GameObject self, GameObject headIk) : base(self, headIk) {}
+    public S_PlayerAggressive(GameObject self, GameObject headIk) : base(self, headIk) {}
 
     public override void HandleLateUpdate(GameObject inProximityEnemy) {
         LookAtInProximityEnemy(inProximityEnemy);
     }
-
+    
     public override void HandleEnemyEnterCloseZone(Collider col) {
         animator_.SetBool("isAggressive", true);
     }
