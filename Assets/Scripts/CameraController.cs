@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
     {
         Quaternion targetRotation = new Quaternion(mainCamera.transform.rotation.x, 0.0f, mainCamera.transform.rotation.z, 1);
 
-        if (playerCon.IsMoving)
+        if (playerCon.IsInMovingState())
         {
             cameraState = cameraStateMap["MOVING"];
         }

@@ -35,41 +35,9 @@ public class PlayerController : MonoBehaviour
         state_ = stateMap_["Idle"];
     }
 
-    void Update()
-    {
-        Debug.Log("HP :: " + statMap_["HP"].GetStatValue());
-        Debug.Log("Attack :: " + statMap_["Attack"].GetStatValue());
-
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        bool isRunning = Input.GetKey("left shift");
-        float moveSpeed = (isRunning) ? runSpeed : walkSpeed;
-
-        if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
-        {
-            IsMoving = true;
-
-            if(isRunning)
-            {
-                animator.SetBool("isRunning", true);
-                animator.SetBool("isWalking", false);
-            }
-            else
-            {
-                animator.SetBool("isRunning", false);
-                animator.SetBool("isWalking", true);
-            }
-        }
-        else
-        {
-            animator.SetBool("isRunning", false);
-            animator.SetBool("isWalking", false);
-            IsMoving = false;
-        }
-
-        velocity = mainCamera.transform.right * x + -transform.up * gravity + mainCamera.transform.forward * z;
-        controller.Move(velocity * moveSpeed * Time.deltaTime);
+    void Update() {
+        state_.SetAnimatorFlags();
+        state_.HandleInput();
     }
 
     private void LateUpdate() {
@@ -81,7 +49,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider hit) {
-        if(hit.gameObject.tag == "Enemy") {
+        /*if(hit.gameObject.tag == "Enemy") {
             inProximityEnemy_ = hit.gameObject;
 
             int? enemyAttackStat = hit.gameObject.GetComponent<PredatorAI>().GetStatValueByName("Attack");
@@ -96,15 +64,15 @@ public class PlayerController : MonoBehaviour
             }
 
             state_.HandleEnemyEnterCloseZone(hit);
-        }
+        }*/
     }
 
     private void OnTriggerExit(Collider hit) {
-        if(hit.gameObject.tag == "Enemy") {
+        /*if(hit.gameObject.tag == "Enemy") {
             inProximityEnemy_ = null;
             state_ = stateMap_["Idle"];
             state_.HandleEnemyExitCloseZone(hit);
-        }
+        }*/
     }
 
     private Dictionary<string, Stat> BuildStatMap() {
@@ -126,6 +94,8 @@ public class PlayerController : MonoBehaviour
         return new Dictionary<string, EntityState> 
         {
             { "Idle", new S_PlayerIdle(gameObject, headIk_) },
+            { "Walk", new S_PlayerWalk(gameObject, headIk_) },
+            { "Run", new S_PlayerRun(gameObject, headIk_) },
             { "Scared", new S_PlayerScared(gameObject, headIk_) },
             { "Aggressive", new S_PlayerAggressive(gameObject, headIk_) }
         };
@@ -134,5 +104,17 @@ public class PlayerController : MonoBehaviour
     public int? GetStatValueByName(string statName) {
         if(string.IsNullOrEmpty(statName) || !statMap_.ContainsKey(statName)) return null;
         return statMap_[statName].GetStatValue();
+    }
+
+    public void SetPlayerState(string stateName) {
+        if(string.IsNullOrEmpty(stateName)) return;
+
+        if(stateMap_.ContainsKey(stateName)) {
+            state_ = stateMap_[stateName];
+        }
+    }
+
+    public bool IsInMovingState() {
+        return state_.IsMovingState;
     }
 }
