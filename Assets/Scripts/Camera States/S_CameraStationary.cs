@@ -6,8 +6,6 @@ public class S_CameraStationary : CameraState
 {
     public override void Rotate()
     {
-        base.Rotate();
-
         offset_ = player_.transform.position - mainCamera_.transform.position;
 
         mousePosition_ = GetMousePosition();

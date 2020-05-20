@@ -13,8 +13,6 @@ public class PlayerController : MonoBehaviour
     private EntityState state_;
     private GameObject inProximityEnemy_;
 
-    public bool IsMoving { get; set; }
-
     [SerializeField] private float walkSpeed = 6.0f;
     [SerializeField] private float runSpeed = 12.0f;
     [SerializeField] private float gravity = 5.0f;
@@ -28,7 +26,6 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
-        IsMoving = false;
 
         statMap_ = BuildStatMap();
         stateMap_ = BuildStateMap();
@@ -38,6 +35,7 @@ public class PlayerController : MonoBehaviour
     void Update() {
         state_.SetAnimatorFlags();
         state_.HandleInput();
+        state_.HandleUpdate();
     }
 
     private void LateUpdate() {
@@ -48,31 +46,14 @@ public class PlayerController : MonoBehaviour
         return velocity;
     }
 
-    private void OnTriggerEnter(Collider hit) {
-        /*if(hit.gameObject.tag == "Enemy") {
-            inProximityEnemy_ = hit.gameObject;
-
-            int? enemyAttackStat = hit.gameObject.GetComponent<PredatorAI>().GetStatValueByName("Attack");
-            int? playerAttackStat = GetStatValueByName("Attack");
-
-            if(enemyAttackStat != null && playerAttackStat != null) {
-                if(enemyAttackStat > playerAttackStat) {
-                    state_ = stateMap_["Scared"];
-                } else {
-                    state_ = stateMap_["Aggressive"];
-                }
-            }
-
-            state_.HandleEnemyEnterCloseZone(hit);
-        }*/
+    private void OnTriggerEnter(Collider col) {
+        inProximityEnemy_ = col.gameObject;
+        state_.HandleOnTriggerEnter(col);
     }
 
-    private void OnTriggerExit(Collider hit) {
-        /*if(hit.gameObject.tag == "Enemy") {
-            inProximityEnemy_ = null;
-            state_ = stateMap_["Idle"];
-            state_.HandleEnemyExitCloseZone(hit);
-        }*/
+    private void OnTriggerExit(Collider col) {
+        inProximityEnemy_ = null;
+        state_.HandleOnTriggerExit(col);
     }
 
     private Dictionary<string, Stat> BuildStatMap() {
@@ -83,7 +64,7 @@ public class PlayerController : MonoBehaviour
         hpStat.AddModifier(new StatModifier(hpStat.Name, StatModifier.ModifierType.MULTIPLY, -0.5f));
         statMap.Add(hpStat.Name, hpStat);
 
-        Stat attackStat = new Stat("Attack", 12);
+        Stat attackStat = new Stat("Attack", 5);
         attackStat.AddModifier(new StatModifier(attackStat.Name, StatModifier.ModifierType.MULTIPLY, 0.5f));
         statMap.Add(attackStat.Name, attackStat);
 
@@ -97,7 +78,8 @@ public class PlayerController : MonoBehaviour
             { "Walk", new S_PlayerWalk(gameObject, headIk_) },
             { "Run", new S_PlayerRun(gameObject, headIk_) },
             { "Scared", new S_PlayerScared(gameObject, headIk_) },
-            { "Aggressive", new S_PlayerAggressive(gameObject, headIk_) }
+            { "Aggressive", new S_PlayerAggressive(gameObject, headIk_) },
+            { "Retreat", new S_PlayerRetreat(gameObject, headIk_) }
         };
     }
 

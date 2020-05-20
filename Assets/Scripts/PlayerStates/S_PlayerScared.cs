@@ -1,20 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class S_PlayerScared : EntityState
+public class S_PlayerScared : S_PlayerConflict
 {
     public S_PlayerScared(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void HandleLateUpdate(GameObject inProximityEnemy) {
-        LookAtInProximityEnemy(inProximityEnemy);
-    }
-
-    public override void HandleEnemyEnterCloseZone(Collider col) {
+    public override void SetAnimatorFlags() {
+        animator_.SetBool("isWalking", false);
+        animator_.SetBool("isRunning", false);
         animator_.SetBool("isScared", true);
-    }
-
-    public override void HandleEnemyExitCloseZone(Collider col) {
-        animator_.SetBool("isScared", false);
+        animator_.SetBool("isHeadShaking", false);
+        animator_.SetBool("isSitting", false);
+        animator_.SetBool("isAggressive", false);
     }
 }

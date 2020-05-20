@@ -15,14 +15,14 @@ public class S_PlayerIdle : EntityState
         animator_.SetBool("isAggressive", false);
     }
 
-    public override void HandleEnemyEnterCloseZone(Collider col) {
-        animator_.SetBool("isScared", false);
-        animator_.SetBool("isAggressive", false);
-    }
-
-    public override void HandleEnemyExitCloseZone(Collider col) {
-        animator_.SetBool("isScared", false);
-        animator_.SetBool("isAggressive", false);
+    public override void HandleOnTriggerEnter(Collider col) {
+        if(col.gameObject.tag == "Enemy") {
+            if(IsPlayerStrongerThanEnemy(col.gameObject)) {
+                playerController_.SetPlayerState("Aggressive");
+            } else {
+                playerController_.SetPlayerState("Scared");
+            }
+        }
     }
 
     public override void HandleInput() {

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class S_PlayerWalk : EntityState
 {
@@ -13,6 +11,20 @@ public class S_PlayerWalk : EntityState
     public override void SetAnimatorFlags() {
         animator_.SetBool("isWalking", true);
         animator_.SetBool("isRunning", false);
+        animator_.SetBool("isScared", false);
+        animator_.SetBool("isHeadShaking", false);
+        animator_.SetBool("isSitting", false);
+        animator_.SetBool("isAggressive", false);
+    }
+
+    public override void HandleOnTriggerEnter(Collider col) {
+        if(col.gameObject.tag == "Enemy") {
+            if(IsPlayerStrongerThanEnemy(col.gameObject)) {
+                playerController_.SetPlayerState("Aggressive");
+            } else {
+                playerController_.SetPlayerState("Scared");
+            }
+        }
     }
 
     public override void HandleInput() {

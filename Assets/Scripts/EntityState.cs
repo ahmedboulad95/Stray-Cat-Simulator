@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class EntityState
 {
@@ -25,13 +26,21 @@ public class EntityState
 
     public virtual void SetAnimatorFlags() {}
 
+    public virtual void HandleUpdate() {}
+
     public virtual void HandleLateUpdate(GameObject inProximityEnemy) {}
 
+    public virtual void HandleInput() {}
+
+    public virtual void HandleOnTriggerEnter(Collider col) {}
+
+    public virtual void HandleOnTriggerExit(Collider col) {}
+
+    [ObsoleteAttribute("This method will be deleted soon")]
     public virtual void HandleEnemyEnterCloseZone(Collider col) {}
 
+    [ObsoleteAttribute("This method will be deleted soon")]
     public virtual void HandleEnemyExitCloseZone(Collider col) {}
-
-    public virtual void HandleInput() {}
 
     protected void LookAtInProximityEnemy(GameObject inProximityEnemy) {
         if(inProximityEnemy != null) {
@@ -39,34 +48,25 @@ public class EntityState
             Quaternion lookRotation = Quaternion.LookRotation(headIk_.transform.forward, direction);
             float rotationAngle = Quaternion.Angle(lookRotation, baseHeadRotation_);
             if(rotationAngle < -80.0f) {
-                //self_.transform.LookAt(inProximityEnemy.transform);
-                //self_.transform.Rotate(0, rotationAngle + 80, 0, Space.Self);
-                //headIk_.transform.rotation = Quaternion.AngleAxis(80, new Vector3(0, 0, -1));
+
             } else if(rotationAngle > 80.0f) {
-                //self_.transform.LookAt(inProximityEnemy.transform);
-                //self_.transform.Rotate(0, rotationAngle - 80, 0, Space.Self);
-                //headIk_.transform.rotation = Quaternion.AngleAxis(80, new Vector3(0, 0, 1));
+
             } else {
                 headIk_.transform.rotation = lookRotation;
             }
-            //headIk_.transform.rotation = Quaternion.LookRotation(headIk_.transform.forward, direction);
         }
     }
 
-    protected void HandleMovement(float moveSpeed, string shiftToState) {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+    protected bool IsPlayerStrongerThanEnemy(GameObject enemy) {
+        int? enemyAttackStat = enemy.GetComponent<PredatorAI>().GetStatValueByName("Attack");
+        int? playerAttackStat = playerController_.GetStatValueByName("Attack");
 
-        if(!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f)) {
-            if(Input.GetKey("left shift")) {
-                playerController_.SetPlayerState(shiftToState);
-                return;
+        bool isPlayerStronger = false;
+        if(enemyAttackStat != null && playerAttackStat != null) {
+            if(playerAttackStat > enemyAttackStat) {
+                isPlayerStronger = true;
             }
-
-            Vector3 velocity = mainCamera_.transform.right * x + -self_.transform.up * gravity_ + mainCamera_.transform.forward * z;
-            controller_.Move(velocity * moveSpeed * Time.deltaTime);
-        } else {
-            playerController_.SetPlayerState("Idle");
         }
+        return isPlayerStronger;
     }
 }
