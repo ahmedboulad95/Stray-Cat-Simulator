@@ -611,15 +611,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1325039458709925704, guid: ff0326beb818643d6acae4a62bdcece7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3554790511390286794, guid: ff0326beb818643d6acae4a62bdcece7,
         type: 3}
       propertyPath: headIk_
       value: 
       objectReference: {fileID: 1880842987}
+    - target: {fileID: 3554790511390286794, guid: ff0326beb818643d6acae4a62bdcece7,
+        type: 3}
+      propertyPath: bigBallOfViolencePrefab_
+      value: 
+      objectReference: {fileID: 5385238629274975463, guid: 7b1bea38fbbb3456ab54ecc29dce72af,
+        type: 3}
     - target: {fileID: 4788674631711991090, guid: ff0326beb818643d6acae4a62bdcece7,
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4788674631711991090, guid: ff0326beb818643d6acae4a62bdcece7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8372072874924103457, guid: ff0326beb818643d6acae4a62bdcece7,
         type: 3}
@@ -694,6 +710,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273978208769098350, guid: 0c6303da2034b4753ba3befcc5e21677,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 2879292983920013437, guid: 0c6303da2034b4753ba3befcc5e21677,
         type: 3}
