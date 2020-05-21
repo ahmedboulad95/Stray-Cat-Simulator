@@ -17,7 +17,7 @@ public class CatAI : PredatorAI
     }
 
     private void LateUpdate() {
-        state_.HandleLateUpdate(inProximityEnemy_);
+        state_.HandleLateUpdate();
     }
 
     private void OnTriggerEnter(Collider col) {

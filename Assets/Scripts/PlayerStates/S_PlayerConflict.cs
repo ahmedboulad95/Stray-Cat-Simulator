@@ -4,7 +4,7 @@ public class S_PlayerConflict : EntityState
 {
     public S_PlayerConflict(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void HandleInput() {
+    protected override void HandleInput() {
         if(Input.GetKeyDown("space")) {
             Debug.Log("Moving out of radius");
             playerController_.SetPlayerState("Retreat");
@@ -14,7 +14,8 @@ public class S_PlayerConflict : EntityState
         }
     }
 
-    public override void HandleLateUpdate(GameObject inProximityEnemy) {
-        LookAtInProximityEnemy(inProximityEnemy);
+    public override void HandleLateUpdate() {
+        base.HandleLateUpdate();
+        LookAtInProximityEnemy();
     }
 }

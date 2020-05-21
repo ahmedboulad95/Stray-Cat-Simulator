@@ -6,8 +6,9 @@ public class S_EnemyScared : EntityState
 {
     public S_EnemyScared(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void HandleLateUpdate(GameObject inProximityEnemy) {
-        LookAtInProximityEnemy(inProximityEnemy);
+    public override void HandleLateUpdate() {
+        base.HandleLateUpdate();
+        LookAtInProximityEnemy();
     }
 
     public override void HandleEnemyEnterCloseZone(Collider col) {

@@ -6,7 +6,7 @@ public class S_PlayerIdle : EntityState
 {
     public S_PlayerIdle(GameObject self, GameObject headIk) : base(self, headIk) {}
     
-    public override void SetAnimatorFlags() {
+    protected override void SetAnimatorFlags() {
         animator_.SetBool("isWalking", false);
         animator_.SetBool("isRunning", false);
         animator_.SetBool("isScared", false);
@@ -17,6 +17,8 @@ public class S_PlayerIdle : EntityState
 
     public override void HandleOnTriggerEnter(Collider col) {
         if(col.gameObject.tag == "Enemy") {
+            base.HandleOnTriggerEnter(col);
+            
             if(IsPlayerStrongerThanEnemy(col.gameObject)) {
                 playerController_.SetPlayerState("Aggressive");
             } else {
@@ -25,7 +27,7 @@ public class S_PlayerIdle : EntityState
         }
     }
 
-    public override void HandleInput() {
+    protected override void HandleInput() {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 

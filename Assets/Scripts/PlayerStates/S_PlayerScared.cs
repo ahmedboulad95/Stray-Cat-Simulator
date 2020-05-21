@@ -4,7 +4,7 @@ public class S_PlayerScared : S_PlayerConflict
 {
     public S_PlayerScared(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void SetAnimatorFlags() {
+    protected override void SetAnimatorFlags() {
         animator_.SetBool("isWalking", false);
         animator_.SetBool("isRunning", false);
         animator_.SetBool("isScared", true);

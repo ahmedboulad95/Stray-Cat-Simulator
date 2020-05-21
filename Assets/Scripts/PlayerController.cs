@@ -3,56 +3,36 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody rb;
-    private CharacterController controller;
-    private Camera mainCamera;
-    private Vector3 velocity;
     private Dictionary<string, Stat> statMap_;
     private Dictionary<string, EntityState> stateMap_;
     private EntityState state_;
     private GameObject inProximityEnemy_;
 
-    [SerializeField] private float walkSpeed = 6.0f;
-    [SerializeField] private float runSpeed = 12.0f;
-    [SerializeField] private float gravity = 5.0f;
     [SerializeField] private GameObject headIk_;
+    [SerializeField] private GameObject bigBallOfViolencePrefab_;
 
-    [SerializeField] private GameObject bigBallOfViolencePrefab;
-    private bool isFighting = false;
+    [SerializeField] private float walkSpeed_ = 6.0f;
+    [SerializeField] private float runSpeed_ = 12.0f;
 
     void Start() {
-        animator = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
-        rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main;
-
         statMap_ = BuildStatMap();
         stateMap_ = BuildStateMap();
         state_ = stateMap_["Idle"];
     }
 
     void Update() {
-        state_.SetAnimatorFlags();
-        state_.HandleInput();
         state_.HandleUpdate();
     }
 
     private void LateUpdate() {
-        state_.HandleLateUpdate(inProximityEnemy_);
-    }
-
-    public Vector3 GetVelocity() {
-        return velocity;
+        state_.HandleLateUpdate();
     }
 
     private void OnTriggerEnter(Collider col) {
-        inProximityEnemy_ = col.gameObject;
         state_.HandleOnTriggerEnter(col);
     }
 
     private void OnTriggerExit(Collider col) {
-        inProximityEnemy_ = null;
         state_.HandleOnTriggerExit(col);
     }
 
@@ -75,11 +55,12 @@ public class PlayerController : MonoBehaviour
         return new Dictionary<string, EntityState> 
         {
             { "Idle", new S_PlayerIdle(gameObject, headIk_) },
-            { "Walk", new S_PlayerWalk(gameObject, headIk_) },
-            { "Run", new S_PlayerRun(gameObject, headIk_) },
+            { "Walk", new S_PlayerWalk(gameObject, headIk_, walkSpeed_) },
+            { "Run", new S_PlayerRun(gameObject, headIk_, runSpeed_) },
             { "Scared", new S_PlayerScared(gameObject, headIk_) },
             { "Aggressive", new S_PlayerAggressive(gameObject, headIk_) },
-            { "Retreat", new S_PlayerRetreat(gameObject, headIk_) }
+            { "Retreat", new S_PlayerRetreat(gameObject, headIk_) },
+            { "Fight", new S_PlayerFight(gameObject, headIk_, bigBallOfViolencePrefab_) }
         };
     }
 
@@ -93,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
         if(stateMap_.ContainsKey(stateName)) {
             state_ = stateMap_[stateName];
+            state_.HandleStateSet();
         }
     }
 

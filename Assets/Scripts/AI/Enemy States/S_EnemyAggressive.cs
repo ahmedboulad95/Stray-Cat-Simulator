@@ -4,8 +4,9 @@ public class S_EnemyAggressive : EntityState
 {
     public S_EnemyAggressive(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void HandleLateUpdate(GameObject inProximityEnemy) {
-        LookAtInProximityEnemy(inProximityEnemy);
+    public override void HandleLateUpdate() {
+        base.HandleLateUpdate();
+        LookAtInProximityEnemy();
     }
 
     public override void HandleEnemyEnterCloseZone(Collider col) {

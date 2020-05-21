@@ -6,8 +6,8 @@ public class S_EnemyIdle : EntityState
 {
     public S_EnemyIdle(GameObject self, GameObject headIk) : base(self, headIk) {}
 
-    public override void HandleLateUpdate(GameObject inProximityEnemy) {
-        
+    public override void HandleLateUpdate() {
+        base.HandleLateUpdate();
     }
 
     public override void HandleEnemyEnterCloseZone(Collider col) {
