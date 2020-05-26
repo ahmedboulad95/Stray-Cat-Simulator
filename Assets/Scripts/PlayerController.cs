@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
     private Dictionary<string, EntityState> stateMap_;
     private EntityState state_;
     private GameObject inProximityEnemy_;
+    
+    private Animator animator_;
+    private bool isJumping_;
+    private CharacterController controller_;
+    private bool isHalfwayThroughJump_ = false;
 
     [SerializeField] private GameObject headIk_;
     [SerializeField] private GameObject bigBallOfViolencePrefab_;
@@ -18,10 +23,30 @@ public class PlayerController : MonoBehaviour
         statMap_ = BuildStatMap();
         stateMap_ = BuildStateMap();
         state_ = stateMap_["Idle"];
+        animator_ = GetComponent<Animator>();
+        controller_ = GetComponent<CharacterController>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update() {
         state_.HandleUpdate();
+
+        if(Input.GetKey("space")) {
+            animator_.SetBool("isJumping", true);
+            isJumping_ = true;
+        }
+
+        /*if(isHalfwayThroughJump_) {
+            Vector3 velocity = -transform.up * 5.0f + transform.forward;
+            controller_.Move(velocity * 6.0f * Time.deltaTime);
+        }*/
+
+        /*if(isJumping_) {
+            Vector3 velocity = -transform.up * 5.0f + transform.forward;
+            controller_.Move(velocity * 6.0f * Time.deltaTime);
+        }*/
     }
 
     private void LateUpdate() {
@@ -80,5 +105,18 @@ public class PlayerController : MonoBehaviour
 
     public bool IsInMovingState() {
         return state_.IsMovingState;
+    }
+
+    public void SetIsJumping(bool isJumping) {
+        //isJumping_ = isJumping;
+        //animator_.SetBool("isJumping", false);
+        //isHalfwayThroughJump_ = false;
+        state_.NotifyAnimationDone();
+    }
+
+    public void HandleRotate() {
+        state_.DoRotate();
+        //isHalfwayThroughJump_ = true;
+        
     }
 }

@@ -13,6 +13,7 @@ public class S_PlayerIdle : EntityState
         animator_.SetBool("isHeadShaking", false);
         animator_.SetBool("isSitting", false);
         animator_.SetBool("isAggressive", false);
+        animator_.SetBool("isJumping", false);
     }
 
     public override void HandleOnTriggerEnter(Collider col) {

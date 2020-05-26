@@ -47,6 +47,9 @@ public class EntityState
 
     protected virtual void SetAnimatorFlags() {}
 
+    public virtual void DoRotate() {}
+    public virtual void NotifyAnimationDone() {}
+
     [ObsoleteAttribute("This method will be deleted soon")]
     public virtual void HandleEnemyEnterCloseZone(Collider col) {}
 
