@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping_;
     private CharacterController controller_;
     private bool isHalfwayThroughJump_ = false;
+    private TimeTracker timeTracker_;
 
     [SerializeField] private GameObject headIk_;
     [SerializeField] private GameObject bigBallOfViolencePrefab_;
@@ -20,11 +21,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float runSpeed_ = 12.0f;
 
     void Start() {
-        statMap_ = BuildStatMap();
-        stateMap_ = BuildStateMap();
-        state_ = stateMap_["Idle"];
         animator_ = GetComponent<Animator>();
         controller_ = GetComponent<CharacterController>();
+        timeTracker_ = GetComponent<TimeTracker>();
+        statMap_ = BuildStatMap();
+        stateMap_ = BuildStateMap();
+        SetPlayerState("Idle");
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -85,7 +87,8 @@ public class PlayerController : MonoBehaviour
             { "Scared", new S_PlayerScared(gameObject, headIk_) },
             { "Aggressive", new S_PlayerAggressive(gameObject, headIk_) },
             { "Retreat", new S_PlayerRetreat(gameObject, headIk_) },
-            { "Fight", new S_PlayerFight(gameObject, headIk_, bigBallOfViolencePrefab_) }
+            { "Fight", new S_PlayerFight(gameObject, headIk_, bigBallOfViolencePrefab_) },
+            { "Sitting", new S_PlayerSitting(gameObject, headIk_) }
         };
     }
 
@@ -98,6 +101,8 @@ public class PlayerController : MonoBehaviour
         if(string.IsNullOrEmpty(stateName)) return;
 
         if(stateMap_.ContainsKey(stateName)) {
+            if(state_ != null)
+                state_.HandleStateEnd();
             state_ = stateMap_[stateName];
             state_.HandleStateSet();
         }
@@ -118,5 +123,13 @@ public class PlayerController : MonoBehaviour
         state_.DoRotate();
         //isHalfwayThroughJump_ = true;
         
+    }
+
+    public void SetTimeTracker(float seconds, TimeTracker.TimeUpHandler handler) {
+        timeTracker_.StartTimer(seconds, handler);
+    }
+
+    public void StopTimeTracker() {
+        timeTracker_.StopTimer();
     }
 }

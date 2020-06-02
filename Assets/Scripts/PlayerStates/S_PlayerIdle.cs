@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class S_PlayerIdle : EntityState
 {
@@ -14,6 +12,14 @@ public class S_PlayerIdle : EntityState
         animator_.SetBool("isSitting", false);
         animator_.SetBool("isAggressive", false);
         animator_.SetBool("isJumping", false);
+    }
+
+    public override void HandleStateSet() {
+        base.HandleStateSet();
+        playerController_.SetTimeTracker(10.0f, () => { 
+            Debug.Log("Switching to player sitting");
+            playerController_.SetPlayerState("Sitting"); 
+        });
     }
 
     public override void HandleOnTriggerEnter(Collider col) {
@@ -39,5 +45,9 @@ public class S_PlayerIdle : EntityState
                 playerController_.SetPlayerState("Walk");
             }
         }
+    }
+
+    public override void HandleStateEnd() {
+        playerController_.StopTimeTracker();
     }
 }

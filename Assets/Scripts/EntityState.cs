@@ -26,6 +26,7 @@ public class EntityState
     }
 
     public virtual void HandleStateSet() {
+        //playerController_.StopTimeTracker();
         SetAnimatorFlags();
     }
 
@@ -49,6 +50,8 @@ public class EntityState
 
     public virtual void DoRotate() {}
     public virtual void NotifyAnimationDone() {}
+
+    public virtual void HandleStateEnd() {}
 
     [ObsoleteAttribute("This method will be deleted soon")]
     public virtual void HandleEnemyEnterCloseZone(Collider col) {}
