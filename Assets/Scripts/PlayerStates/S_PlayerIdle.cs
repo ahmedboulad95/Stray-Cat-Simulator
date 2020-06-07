@@ -2,7 +2,9 @@
 
 public class S_PlayerIdle : EntityState
 {
-    public S_PlayerIdle(GameObject self, GameObject headIk) : base(self, headIk) {}
+    public S_PlayerIdle(GameObject self, GameObject headIk) : base(self, headIk) {
+        moveSpeed_ = 0.0f;
+    }
     
     protected override void SetAnimatorFlags() {
         animator_.SetBool("isWalking", false);
@@ -35,6 +37,8 @@ public class S_PlayerIdle : EntityState
     }
 
     protected override void HandleInput() {
+        base.HandleInput();
+        
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 

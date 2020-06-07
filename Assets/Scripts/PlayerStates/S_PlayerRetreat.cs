@@ -37,7 +37,7 @@ public class S_PlayerRetreat : EntityState
         if(isWalking_) {
             Debug.Log("Walking away");
             animator_.SetBool("isWalking", true);
-            Vector3 velocity = -self_.transform.up * gravity_ + self_.transform.forward;
+            Vector3 velocity = -self_.transform.up * GRAVITY_ + self_.transform.forward;
             controller_.Move(velocity * 6.0f * Time.deltaTime);
         }
     }

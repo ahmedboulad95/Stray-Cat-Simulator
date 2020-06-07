@@ -10,8 +10,14 @@ public class EntityState
     protected PlayerController playerController_;
     protected Quaternion baseHeadRotation_;
     protected Camera mainCamera_;
-    protected static float gravity_ = 5.0f;
+    protected Vector3 moveDirection_;
+    protected float moveSpeed_ = 0.0f;
+    protected const float GRAVITY_ = 20.0f;
+    protected const float MAX_SPEED_ = 20.0f;
+    protected const float LERP_SPEED_ = 2.5f;
     protected static GameObject inProximityEnemy_;
+    protected static float turnSmoothTime_ = 0.1f;
+    protected float turnSmoothVelocity_;
     public bool IsMovingState;
 
     public EntityState(GameObject self, GameObject headIk) {
@@ -32,6 +38,11 @@ public class EntityState
 
     public virtual void HandleUpdate() {
         HandleInput();
+        HandleMovement();
+        
+        float currentSpeed = animator_.GetFloat("speedPercent") * MAX_SPEED_;
+        float currentSpeedPercent = Mathf.Lerp(currentSpeed, moveSpeed_, Time.deltaTime * LERP_SPEED_) / MAX_SPEED_;
+        animator_.SetFloat("speedPercent", currentSpeedPercent);
     }
 
     public virtual void HandleLateUpdate() {}
@@ -44,7 +55,14 @@ public class EntityState
         inProximityEnemy_ = null;
     }
 
-    protected virtual void HandleInput() {}
+    protected virtual void HandleInput() {
+        moveDirection_ = MovementUtility.GetMoveDirection(self_, mainCamera_, turnSmoothTime_, ref turnSmoothVelocity_);
+    }
+
+    protected virtual void HandleMovement() {
+        moveDirection_.y -= GRAVITY_ * Time.deltaTime;
+        controller_.Move(moveDirection_.normalized * moveSpeed_ * Time.deltaTime);
+    }
 
     protected virtual void SetAnimatorFlags() {}
 
@@ -52,12 +70,6 @@ public class EntityState
     public virtual void NotifyAnimationDone() {}
 
     public virtual void HandleStateEnd() {}
-
-    [ObsoleteAttribute("This method will be deleted soon")]
-    public virtual void HandleEnemyEnterCloseZone(Collider col) {}
-
-    [ObsoleteAttribute("This method will be deleted soon")]
-    public virtual void HandleEnemyExitCloseZone(Collider col) {}
 
     protected void LookAtInProximityEnemy() {
         if(inProximityEnemy_ != null) {
@@ -94,4 +106,10 @@ public class EntityState
             playerController_.SetPlayerState("Scared");
         }
     }
+
+    [ObsoleteAttribute("This method will be deleted soon")]
+    public virtual void HandleEnemyEnterCloseZone(Collider col) {}
+
+    [ObsoleteAttribute("This method will be deleted soon")]
+    public virtual void HandleEnemyExitCloseZone(Collider col) {}
 }

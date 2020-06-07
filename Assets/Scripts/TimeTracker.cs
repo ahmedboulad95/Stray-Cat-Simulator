@@ -14,7 +14,6 @@ public class TimeTracker : MonoBehaviour
 
         if(secondsLeft_ > 0) {
             secondsLeft_ -= Time.deltaTime;
-            Debug.Log(secondsLeft_);
         }
     }
 
@@ -24,7 +23,6 @@ public class TimeTracker : MonoBehaviour
     }
 
     public void StopTimer() {
-        Debug.Log("Stopping timer");
         secondsLeft_ = 0.0f;
         handler_ = null;
     }

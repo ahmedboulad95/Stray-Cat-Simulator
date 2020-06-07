@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-public class S_PlayerWalk : S_PlayerMove
+public class S_PlayerWalk : EntityState
 {
-    public S_PlayerWalk(GameObject self, GameObject headIk, float moveSpeed) : base(self, headIk, moveSpeed) {
+    public S_PlayerWalk(GameObject self, GameObject headIk, float moveSpeed) : base(self, headIk) {
+        moveSpeed_ = MAX_SPEED_ / 2f;
         IsMovingState = true;
     }
 
@@ -15,10 +16,20 @@ public class S_PlayerWalk : S_PlayerMove
         animator_.SetBool("isAggressive", false);
     }
 
-    protected override void HandleInput() {
-        base.MovePlayer();
+    public override void HandleOnTriggerEnter(Collider col) {
+        if(col.gameObject.tag == "Enemy") {
+            base.HandleOnTriggerEnter(col);
+            base.HandleEnemyEncounter(col.gameObject);
+        }
+    }
 
-        if(Input.GetKey("left shift")) {
+    protected override void HandleInput() {
+        base.HandleInput();
+
+        if(moveDirection_ == Vector3.zero) {
+            playerController_.SetPlayerState("Idle");
+            return;
+        } else if(Input.GetKey("left shift")) {
             playerController_.SetPlayerState("Run");
             return;
         }
