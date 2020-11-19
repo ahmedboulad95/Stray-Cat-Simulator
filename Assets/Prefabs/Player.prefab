@@ -909,7 +909,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8372072874924103457}
   - component: {fileID: 3554790511390286796}
-  - component: {fileID: 3554790511390286795}
   - component: {fileID: 3554790511390286794}
   m_Layer: 0
   m_Name: Player
@@ -952,25 +951,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: -0.12, z: 0}
---- !u!95 &3554790511390286795
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788674631711991090}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 448ce9f9c48714cdf8bca7b9461a46e1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &3554790511390286794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,11 +963,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d52f812da2f4e8ab5196006be87018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 8
-  runSpeed: 14
-  gravity: 5
-  bigBallOfViolencePrefab: {fileID: 5385238629274975463, guid: 7b1bea38fbbb3456ab54ecc29dce72af,
-    type: 3}
+  headIk_: {fileID: 0}
+  bigBallOfViolencePrefab_: {fileID: 0}
+  walkSpeed_: 6
+  runSpeed_: 12
 --- !u!1 &4917441849318619073
 GameObject:
   m_ObjectHideFlags: 0
